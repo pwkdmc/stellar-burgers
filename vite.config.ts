@@ -20,7 +20,9 @@ export default defineConfig(({ mode }) => {
       'process.env.BURGER_API_URL': JSON.stringify(env.BURGER_API_URL ?? '')
     },
     server: {
-      open: true
+      open: true,
+      host: '0.0.0.0',
+      port: 3000
     },
   };
 });
