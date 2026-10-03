@@ -7,25 +7,26 @@ import type { TModalProps } from './type';
 const modalRoot = document.getElementById('modals');
 
 export const Modal = memo(function Modal({
-  title,
-  onClose,
-  children,
+    title,
+    onClose,
+    children,
+    titleClasses,
 }: TModalProps): React.JSX.Element {
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') onClose();
-    };
+    useEffect(() => {
+        const handleEsc = (e: KeyboardEvent): void => {
+            if (e.key === 'Escape') onClose();
+        };
 
-    document.addEventListener('keydown', handleEsc);
-    return (): void => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-  }, [onClose]);
+        document.addEventListener('keydown', handleEsc);
+        return (): void => {
+            document.removeEventListener('keydown', handleEsc);
+        };
+    }, [onClose]);
 
-  return ReactDOM.createPortal(
-    <ModalUI title={title} onClose={onClose}>
-      {children}
-    </ModalUI>,
-    modalRoot as HTMLDivElement
-  );
+    return ReactDOM.createPortal(
+        <ModalUI titleClasses={titleClasses} title={title} onClose={onClose}>
+            {children}
+        </ModalUI>,
+        modalRoot as HTMLDivElement
+    );
 });
