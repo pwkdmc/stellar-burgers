@@ -1,36 +1,38 @@
-import { getIngredientsApi } from "@/utils/burger-api";
-import type { TIngredient } from "@/utils/types";
-import { createAsyncThunk, createSlice, type SerializedError } from "@reduxjs/toolkit";
+import { getIngredientsApi } from '@/utils/burger-api';
+import { createAsyncThunk, createSlice, type SerializedError } from '@reduxjs/toolkit';
 
-interface AllIngredientsState {
+import type { TIngredient } from '@/utils/types';
+
+type AllIngredientsState = {
     data: TIngredient[];
     loading: boolean;
     error: SerializedError | null;
-}
+};
 
 const initialState: AllIngredientsState = {
     data: [],
     loading: false,
-    error: null
-}
+    error: null,
+};
 
 export const fetchAllIngredients = createAsyncThunk<TIngredient[]>(
     'allIngredients/fetchAllIngredients',
     async () => {
         return getIngredientsApi();
     }
-)
+);
 
 const allIngredientsSlice = createSlice({
     name: 'allIngredients',
     initialState,
     reducers: {},
     selectors: {
-        getIngredients: state => state.data,
-        getIngredientsLoading: state => state.loading,
-        getIngredientsError: state => state.error,
-        getIngredientsState: state => state,
-        getIngredientById: (state, id: string) => state.data.find(item => item._id === id)
+        getIngredients: (state) => state.data,
+        getIngredientsLoading: (state) => state.loading,
+        getIngredientsError: (state) => state.error,
+        getIngredientsState: (state) => state,
+        getIngredientById: (state, id: string) =>
+            state.data.find((item) => item._id === id),
     },
     extraReducers: (builder) => {
         builder
@@ -46,9 +48,15 @@ const allIngredientsSlice = createSlice({
                 state.loading = false;
                 state.data = action.payload;
             });
-    }
+    },
 });
 
-export const { getIngredients, getIngredientsLoading, getIngredientsError, getIngredientsState, getIngredientById } = allIngredientsSlice.selectors;
+export const {
+    getIngredients,
+    getIngredientsLoading,
+    getIngredientsError,
+    getIngredientsState,
+    getIngredientById,
+} = allIngredientsSlice.selectors;
 
 export default allIngredientsSlice.reducer;

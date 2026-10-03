@@ -7,23 +7,23 @@ import type { TModalUIProps } from './type';
 import styles from './modal.module.css';
 
 export const ModalUI = memo(function ModalUI({
-  title,
-  onClose,
-  children,
-  titleClasses
+    title,
+    onClose,
+    children,
+    titleClasses,
 }: TModalUIProps): React.JSX.Element {
-  return (
-    <>
-      <div className={styles.modal}>
-        <div className={styles.header}>
-          <h3 className={titleClasses}>{title}</h3>
-          <button className={styles.button} type="button" aria-label="Закрыть">
-            <CloseIcon type="primary" onClick={onClose} />
-          </button>
-        </div>
-        <div className={styles.content}>{children}</div>
-      </div>
-      <ModalOverlayUI onClick={onClose} />
-    </>
-  );
+    return (
+        <>
+            <div className={styles.modal}>
+                <div className={styles.header}>
+                    <h3 className={titleClasses}>{title}</h3>
+                    <button className={styles.button} type="button" aria-label="Закрыть">
+                        <CloseIcon type="primary" onClick={onClose} />
+                    </button>
+                </div>
+                <div className={styles.content}>{children}</div>
+            </div>
+            <ModalOverlayUI onClick={onClose} />
+        </>
+    );
 });

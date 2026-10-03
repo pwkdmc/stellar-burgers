@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch as dispatchHook, useSelector as selectorHook } from 'react-redux';
 
-import { rootReducer } from './rootReducer';
 import { listenerMiddleware } from './listenerMiddleware';
+import { rootReducer } from './rootReducer';
 
 const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(listenerMiddleware.middleware)
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

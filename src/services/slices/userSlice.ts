@@ -1,26 +1,32 @@
-import { getUserApi, loginUserApi, logoutApi, registerUserApi, updateUserApi, type TLoginData, type TRegisterData } from "@/utils/burger-api";
-import { deleteCookie, setCookie } from "@/utils/cookie";
-import type { TUser } from "@/utils/types";
-import { createAsyncThunk, createSlice, type SerializedError } from "@reduxjs/toolkit";
+import {
+    getUserApi,
+    loginUserApi,
+    logoutApi,
+    registerUserApi,
+    updateUserApi,
+    type TLoginData,
+    type TRegisterData,
+} from '@/utils/burger-api';
+import { deleteCookie, setCookie } from '@/utils/cookie';
+import { createAsyncThunk, createSlice, type SerializedError } from '@reduxjs/toolkit';
 
-interface UserState {
-    loading: boolean,
-    user: TUser | null,
-    error: SerializedError | null
-}
+import type { TUser } from '@/utils/types';
+
+type UserState = {
+    loading: boolean;
+    user: TUser | null;
+    error: SerializedError | null;
+};
 
 const initialState: UserState = {
     loading: false,
     user: null,
-    error: null
+    error: null,
 };
 
-export const fetchUser = createAsyncThunk<TUser>(
-    'user/fetchUser',
-    async () => {
-        return (await getUserApi()).user;
-    }
-)
+export const fetchUser = createAsyncThunk<TUser>('user/fetchUser', async () => {
+    return (await getUserApi()).user;
+});
 
 export const fetchLoginUser = createAsyncThunk<TUser, TLoginData>(
     'user/fetchLoginUser',
@@ -30,7 +36,7 @@ export const fetchLoginUser = createAsyncThunk<TUser, TLoginData>(
         localStorage.setItem('refreshToken', data.refreshToken);
         return data.user;
     }
-)
+);
 
 export const fetchRegisterUser = createAsyncThunk<TUser, TRegisterData>(
     'user/fetchRegisterUser',
@@ -40,35 +46,32 @@ export const fetchRegisterUser = createAsyncThunk<TUser, TRegisterData>(
         localStorage.setItem('refreshToken', data.refreshToken);
         return data.user;
     }
-)
+);
 
-export const fetchLogoutUser = createAsyncThunk(
-    'user/fetchLogoutUser',
-    async () => {
-        await logoutApi();
-        deleteCookie('accessToken');
-        localStorage.removeItem('refreshToken');
-    }
-)
+export const fetchLogoutUser = createAsyncThunk('user/fetchLogoutUser', async () => {
+    await logoutApi();
+    deleteCookie('accessToken');
+    localStorage.removeItem('refreshToken');
+});
 
 export const fetchUpdateUser = createAsyncThunk<TUser, Partial<TRegisterData>>(
     'user/fetchUpdateUser',
     async (user: Partial<TRegisterData>) => {
         return (await updateUserApi(user)).user;
     }
-)
+);
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
     selectors: {
-        getUser: state => state.user,
-        getUserLoading: state => state.loading,
-        getUserError: state => state.error,
-        getUserState: state => state,
-        getUserName: state => state.user?.name,
-        getIsAuth: state => !!state.user
+        getUser: (state) => state.user,
+        getUserLoading: (state) => state.loading,
+        getUserError: (state) => state.error,
+        getUserState: (state) => state,
+        getUserName: (state) => state.user?.name,
+        getIsAuth: (state) => !!state.user,
     },
     extraReducers: (builder) => {
         builder
@@ -138,9 +141,16 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload;
             });
-    }
+    },
 });
 
-export const { getUser, getUserLoading, getUserError, getUserState, getUserName, getIsAuth } = userSlice.selectors;
+export const {
+    getUser,
+    getUserLoading,
+    getUserError,
+    getUserState,
+    getUserName,
+    getIsAuth,
+} = userSlice.selectors;
 
 export default userSlice.reducer;

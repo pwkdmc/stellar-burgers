@@ -1,16 +1,22 @@
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi, type TOrderBurger } from "@/utils/burger-api";
-import type { TOrder } from "@/utils/types";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { type RootState } from "../store";
+import {
+    getOrderByNumberApi,
+    getOrdersApi,
+    orderBurgerApi,
+    type TOrderBurger,
+} from '@/utils/burger-api';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-interface OrdersState {
+import type { RootState } from '../store';
+import type { TOrder } from '@/utils/types';
+
+type OrdersState = {
     orders: TOrder[];
     orderRequest: boolean;
     orderModalData: TOrder | null;
     orderSelected: TOrder | null;
     orderSelectedRequest: boolean;
     loading: boolean;
-}
+};
 
 const initialState: OrdersState = {
     orders: [],
@@ -18,32 +24,29 @@ const initialState: OrdersState = {
     orderModalData: null,
     orderSelected: null,
     orderSelectedRequest: false,
-    loading: false
-}
+    loading: false,
+};
 
-export const fetchOrders = createAsyncThunk<TOrder[]>(
-    'orders/fetchOrders',
-    async () => {
-        return getOrdersApi();
-    }
-)
+export const fetchOrders = createAsyncThunk<TOrder[]>('orders/fetchOrders', async () => {
+    return getOrdersApi();
+});
 
 export const fetchOrderBurger = createAsyncThunk<TOrderBurger, string[]>(
     'orders/fetchOrderBurger',
     async (ingredients: string[]) => {
         return (await orderBurgerApi(ingredients)).order;
     }
-)
+);
 
 export const fetchOrder = createAsyncThunk<TOrder | null, number>(
     'orders/fetchOrder',
     async (number: number, { getState }) => {
         const state = getState() as RootState;
-        const orderUser = state.orders.orders.find(item => item.number === number);
+        const orderUser = state.orders.orders.find((item) => item.number === number);
         if (orderUser) {
             return orderUser;
         }
-        const orderFeeds = state.feeds.orders.find(item => item.number === number);
+        const orderFeeds = state.feeds.orders.find((item) => item.number === number);
         if (orderFeeds) {
             return orderFeeds;
         }
@@ -54,7 +57,7 @@ export const fetchOrder = createAsyncThunk<TOrder | null, number>(
             return null;
         }
     }
-)
+);
 
 const ordersSlice = createSlice({
     name: 'orders',
@@ -67,16 +70,16 @@ const ordersSlice = createSlice({
             state.orders = [];
             state.orderRequest = false;
             state.orderModalData = null;
-        }
+        },
     },
     selectors: {
-        getOrders: state => state.orders,
-        getOrderRequest: state => state.orderRequest,
-        getOrderModalData: state => state.orderModalData,
-        getOrderSelected: state => state.orderSelected,
-        getOrderSelectedRequest: state => state.orderSelectedRequest,
-        getOrdersLoading: state => state.loading,
-        getOrdersState: state => state
+        getOrders: (state) => state.orders,
+        getOrderRequest: (state) => state.orderRequest,
+        getOrderModalData: (state) => state.orderModalData,
+        getOrderSelected: (state) => state.orderSelected,
+        getOrderSelectedRequest: (state) => state.orderSelectedRequest,
+        getOrdersLoading: (state) => state.loading,
+        getOrdersState: (state) => state,
     },
     extraReducers: (builder) => {
         builder
@@ -90,7 +93,6 @@ const ordersSlice = createSlice({
                 state.orders = action.payload;
                 state.loading = false;
             })
-
 
             .addCase(fetchOrderBurger.pending, (state) => {
                 state.orderRequest = true;
@@ -107,7 +109,7 @@ const ordersSlice = createSlice({
                     createdAt: order.createdAt,
                     updatedAt: order.updatedAt,
                     number: order.number,
-                    ingredients: order.ingredients.map(item => item._id)
+                    ingredients: order.ingredients.map((item) => item._id),
                 };
                 state.orders.push(orderData);
                 state.orderRequest = false;
@@ -125,10 +127,18 @@ const ordersSlice = createSlice({
                 state.orderSelectedRequest = false;
                 state.orderSelected = action.payload;
             });
-    }
+    },
 });
 
-export const { getOrders, getOrderRequest, getOrderModalData, getOrderSelected, getOrderSelectedRequest, getOrdersLoading, getOrdersState } = ordersSlice.selectors;
+export const {
+    getOrders,
+    getOrderRequest,
+    getOrderModalData,
+    getOrderSelected,
+    getOrderSelectedRequest,
+    getOrdersLoading,
+    getOrdersState,
+} = ordersSlice.selectors;
 
 export const { closeModal, clearOrders } = ordersSlice.actions;
 

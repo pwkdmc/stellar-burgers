@@ -1,28 +1,28 @@
+import { addIngredient } from '@/services/slices/ingredientsInConstructorSlice';
+import { useDispatch } from '@/services/store';
 import { BurgerIngredientUI } from '@ui';
 import { memo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import type { TBurgerIngredientProps } from './type';
-import { useDispatch } from '@/services/store';
-import { addIngredient } from '@/services/slices/ingredientsInConstructorSlice';
 
 export const BurgerIngredient = memo(function BurgerIngredient({
-  ingredient,
-  count,
+    ingredient,
+    count,
 }: TBurgerIngredientProps): React.JSX.Element {
-  const location = useLocation();
-  const dispatch = useDispatch();
+    const location = useLocation();
+    const dispatch = useDispatch();
 
-  const handleAdd = (): void => {
-    dispatch(addIngredient(ingredient));
-  };
+    const handleAdd = (): void => {
+        dispatch(addIngredient(ingredient));
+    };
 
-  return (
-    <BurgerIngredientUI
-      ingredient={ingredient}
-      count={count}
-      locationState={{ background: location }}
-      handleAdd={handleAdd}
-    />
-  );
+    return (
+        <BurgerIngredientUI
+            ingredient={ingredient}
+            count={count}
+            locationState={{ background: location }}
+            handleAdd={handleAdd}
+        />
+    );
 });
