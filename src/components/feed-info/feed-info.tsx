@@ -1,3 +1,4 @@
+import { getFeedsState } from '@/services/slices/feedsSlice';
 import { useSelector } from '@/services/store';
 import { FeedInfoUI } from '@ui';
 
@@ -10,7 +11,7 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
     .slice(0, 20);
 
 export const FeedInfo = (): React.JSX.Element => {
-  const feed: TFeedState = useSelector(state => state.feeds);
+  const feed: TFeedState = useSelector(getFeedsState);
   const orders: TOrder[] = feed.orders;
 
   const readyOrders = getOrders(orders, 'done');

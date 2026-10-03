@@ -108,8 +108,24 @@ export const getOrdersApi = (): Promise<TOrder[]> =>
     return Promise.reject(toApiError(data));
   });
 
+export type TOrderBurger = {
+  _id: string;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  ingredients: TIngredient[];
+  owner: {
+    name: string,
+    email: string,
+    createdAt: string,
+    updatedAt: string
+  }
+}
+
 type TNewOrderResponse = TServerResponse<{
-  order: TOrder;
+  order: TOrderBurger;
   name: string;
 }>;
 

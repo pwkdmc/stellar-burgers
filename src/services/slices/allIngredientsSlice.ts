@@ -25,6 +25,13 @@ const allIngredientsSlice = createSlice({
     name: 'allIngredients',
     initialState,
     reducers: {},
+    selectors: {
+        getIngredients: state => state.data,
+        getIngredientsLoading: state => state.loading,
+        getIngredientsError: state => state.error,
+        getIngredientsState: state => state,
+        getIngredientById: (state, id: string) => state.data.find(item => item._id === id)
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllIngredients.pending, (state) => {
@@ -41,5 +48,7 @@ const allIngredientsSlice = createSlice({
             });
     }
 });
+
+export const { getIngredients, getIngredientsLoading, getIngredientsError, getIngredientsState, getIngredientById } = allIngredientsSlice.selectors;
 
 export default allIngredientsSlice.reducer;

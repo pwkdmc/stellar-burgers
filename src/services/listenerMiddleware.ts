@@ -1,7 +1,7 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
 import { fetchLoginUser, fetchLogoutUser, fetchRegisterUser, fetchUser } from "./slices/userSlice";
 import { clearOrders, fetchOrderBurger, fetchOrders } from "./slices/ordersSlice";
-import { fetchFeeds } from "./slices/feedsSlice";
+import { clearIngredients } from "./slices/ingredientsInConstructorSlice";
 
 export const listenerMiddleware = createListenerMiddleware();
 
@@ -36,6 +36,6 @@ listenerMiddleware.startListening({
 listenerMiddleware.startListening({
     actionCreator: fetchOrderBurger.fulfilled,
     effect: async (_, api) => {
-        api.dispatch(fetchFeeds());
+        api.dispatch(clearIngredients());
     }
 })

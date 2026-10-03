@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import type { OrderCardProps } from './type';
 import type { TIngredient } from '@utils-types';
 import { useSelector } from '@/services/store';
+import { getIngredients } from '@/services/slices/allIngredientsSlice';
 
 const maxIngredients = 6;
 
@@ -13,7 +14,7 @@ export const OrderCard = memo(function OrderCard({
 }: OrderCardProps): React.JSX.Element | null {
   const location = useLocation();
 
-  const ingredients: TIngredient[] = useSelector(state => state.allIngredients.data);
+  const ingredients: TIngredient[] = useSelector(getIngredients);
 
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;

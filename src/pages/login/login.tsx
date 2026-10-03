@@ -1,4 +1,4 @@
-import { fetchLoginUser } from '@/services/slices/userSlice';
+import { fetchLoginUser, getUserError } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { LoginUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';
@@ -6,7 +6,7 @@ import { type SyntheticEvent, useState } from 'react';
 export const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const error = useSelector((state) => state.user.error);
+  const error = useSelector(getUserError);
   const dispatch = useDispatch();
 
   const handleSubmit = (e: SyntheticEvent): void => {

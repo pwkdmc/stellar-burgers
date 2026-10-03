@@ -62,6 +62,14 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
+    selectors: {
+        getUser: state => state.user,
+        getUserLoading: state => state.loading,
+        getUserError: state => state.error,
+        getUserState: state => state,
+        getUserName: state => state.user?.name,
+        getIsAuth: state => !!state.user
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUser.pending, (state) => {
@@ -132,5 +140,7 @@ const userSlice = createSlice({
             });
     }
 });
+
+export const { getUser, getUserLoading, getUserError, getUserState, getUserName, getIsAuth } = userSlice.selectors;
 
 export default userSlice.reducer;

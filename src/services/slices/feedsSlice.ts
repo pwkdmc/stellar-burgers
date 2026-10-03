@@ -27,6 +27,13 @@ const feedsSlice = createSlice({
     name: 'feeds',
     initialState,
     reducers: {},
+    selectors: {
+        getFeeds: state => state.orders,
+        getFeedsTotal: state => state.total,
+        getFeedsTotalToday: state => state.totalToday,
+        getFeedsLoading: state => state.loading,
+        getFeedsState: state => state
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchFeeds.pending, (state) => {
@@ -43,5 +50,7 @@ const feedsSlice = createSlice({
             });;
     }
 });
+
+export const { getFeeds, getFeedsTotal, getFeedsTotalToday, getFeedsLoading, getFeedsState } = feedsSlice.selectors;
 
 export default feedsSlice.reducer;

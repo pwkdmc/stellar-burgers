@@ -1,4 +1,4 @@
-import { fetchRegisterUser } from '@/services/slices/userSlice';
+import { fetchRegisterUser, getUserError } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { RegisterUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';
@@ -7,7 +7,7 @@ export const Register = (): React.JSX.Element => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const error = useSelector((state) => state.user.error);
+  const error = useSelector(getUserError);
   const dispatch = useDispatch();
 
   const handleSubmit = (e: SyntheticEvent): void => {

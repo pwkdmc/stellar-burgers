@@ -3,16 +3,16 @@ import { useMemo } from 'react';
 
 import type { TConstructorIngredient, TConstructorState, TOrder } from '@utils-types';
 import { useDispatch, useSelector } from '@/services/store';
-import { closeModal, fetchOrderBurger } from '@/services/slices/ordersSlice';
-import { clearIngredients } from '@/services/slices/ingredientsInConstructorSlice';
+import { closeModal, fetchOrderBurger, getOrderModalData, getOrderRequest } from '@/services/slices/ordersSlice';
 import { useNavigate } from 'react-router-dom';
+import { getIngredientsInConstructorState } from '@/services/slices/ingredientsInConstructorSlice';
+import { getIsAuth } from '@/services/slices/userSlice';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
-  /** TODO: Взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems: TConstructorState = useSelector((state) => state.ingredientsInConstructor);
-  const orderRequest = useSelector((state) => state.orders.orderRequest);
-  const orderModalData: TOrder | null = useSelector((state) => state.orders.orderModalData);
-  const isAuth = useSelector(state => state.user.user !== null);
+  const constructorItems: TConstructorState = useSelector(getIngredientsInConstructorState);
+  const orderRequest = useSelector(getOrderRequest);
+  const orderModalData: TOrder | null = useSelector(getOrderModalData);
+  const isAuth = useSelector(getIsAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,12 +22,12 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
       return;
     }
     if (!constructorItems.bun || orderRequest) return;
-    dispatch(fetchOrderBurger(constructorItems.ingredients.map(ing => ing._id)));
+    const ingredients = [constructorItems.bun._id, ...constructorItems.ingredients.map(ing => ing._id), constructorItems.bun._id];
+    dispatch(fetchOrderBurger(ingredients));
   };
 
   const closeOrderModal = (): void => {
     dispatch(closeModal());
-    dispatch(clearIngredients());
   };
 
   const price = useMemo(

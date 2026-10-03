@@ -10,13 +10,13 @@ import '../../index.css';
 import styles from './app.module.css';
 import { useSelector, useDispatch } from '../../services/store';
 import { useEffect, useLayoutEffect } from 'react';
-import { fetchAllIngredients } from '@/services/slices/allIngredientsSlice';
-import { fetchUser } from '@/services/slices/userSlice';
+import { fetchAllIngredients, getIngredientsState } from '@/services/slices/allIngredientsSlice';
+import { fetchUser, getUserState } from '@/services/slices/userSlice';
 import { fetchOrders } from '@/services/slices/ordersSlice';
 import { fetchFeeds } from '@/services/slices/feedsSlice';
 
 const App = (): React.JSX.Element => {
-  const { data: ingredients, loading: isIngredientsLoading, error: ingredientsError } = useSelector((state) => state.allIngredients);
+  const { data: ingredients, loading: isIngredientsLoading, error: ingredientsError } = useSelector(getIngredientsState);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const RouteComponent = (): React.JSX.Element => {
       {backgroundLocation &&
         <Routes>
           <Route path='/feed/:number' element={<OrderInfoModal onClose={() => { navigate(-1) }} />} />
-          <Route path='/ingredients/:id' element={<Modal titleClasses='text text_type_main-large' title='Детали ингридиента' onClose={() => { navigate(-1); }}><IngredientDetails /></Modal>} />
+          <Route path='/ingredients/:id' element={<Modal titleClasses='text text_type_main-large' title='Детали ингредиента' onClose={() => { navigate(-1); }}><IngredientDetails /></Modal>} />
           <Route path='/profile/orders/:number' element={<ProtectedRoute />}>
             <Route path="" element={<OrderInfoModal onClose={() => { navigate(-1) }} />} />
           </Route>
@@ -114,14 +114,16 @@ const RouteComponent = (): React.JSX.Element => {
 };
 
 const ProtectedRoute = ({ onlyUnAuth }: { onlyUnAuth?: boolean }): React.JSX.Element => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector(getUserState);
+  const location = useLocation();
 
   if (user.loading) {
     return <Preloader />;
   }
 
   if (user.user && onlyUnAuth) {
-    return <Navigate replace to='/profile' />;
+    const from = location.state?.from || { pathname: '/' };
+    return <Navigate replace to={from} />;
   }
 
   if (!user.user && !onlyUnAuth) {
@@ -143,7 +145,7 @@ const IngredientDetailsPage = () => {
   return (
     <div style={{ margin: 'auto' }}>
       <h3 style={{ textAlign: 'center' }} className="text text_type_main-large">
-        Детали ингридиента
+        Детали ингредиента
       </h3>
       <IngredientDetails />
     </div>
@@ -153,15 +155,10 @@ const IngredientDetailsPage = () => {
 const OrderInfoPage = () => {
   const { number } = useParams<'number'>();
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.feeds.loading || state.orders.loading);
 
   useLayoutEffect(() => {
     dispatch(fetchFeeds());
   }, []);
-
-  if (loading) {
-    return <Preloader />;
-  }
 
   return (
     <div style={{ margin: 'auto' }}>

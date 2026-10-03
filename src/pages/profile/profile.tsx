@@ -1,10 +1,10 @@
-import { fetchUpdateUser } from '@/services/slices/userSlice';
+import { fetchUpdateUser, getUser } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector(getUser);
   const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState({
@@ -18,6 +18,7 @@ export const Profile = (): React.JSX.Element => {
       ...prevState,
       name: user?.name || '',
       email: user?.email || '',
+      password: ''
     }));
   }, [user]);
 
