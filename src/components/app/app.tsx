@@ -186,7 +186,7 @@ const ProtectedRoute = ({ onlyUnAuth }: { onlyUnAuth?: boolean }): React.JSX.Ele
     }
 
     if (!user.user && !onlyUnAuth) {
-        return <Navigate replace to="/login" />;
+        return <Navigate replace to="/login" state={{ from: location }} />;
     }
 
     return <Outlet />;
