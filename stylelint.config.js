@@ -23,7 +23,6 @@ const config = {
     'function-url-no-scheme-relative': true,
     'number-max-precision': 3,
     'order/order': ['custom-properties', 'declarations'],
-    // `composes` is CSS Modules composition, not a real CSS property.
     'property-no-unknown': [true, { ignoreProperties: ['composes'] }],
     'order/properties-order': [
       'all',
