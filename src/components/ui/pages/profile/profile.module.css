@@ -1,0 +1,21 @@
+.container {
+  composes: container from '../common.module.css';
+  display: flex;
+  width: 1240px;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.menu {
+  width: 320px;
+}
+
+.form {
+  composes: form from '../common.module.css';
+  max-width: 480px;
+}
+
+.error {
+  composes: error from '../common.module.css';
+}
